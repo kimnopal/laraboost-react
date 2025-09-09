@@ -14,8 +14,9 @@ import {
     SidebarRail,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import categories from '@/routes/categories';
 import { Link } from '@inertiajs/react';
-import { Group, Home, Lock, Newspaper, User } from 'lucide-react';
+import { Group, Home, Lock, Newspaper, Tag, User } from 'lucide-react';
 import { NavMain } from './nav-main';
 
 const data = {
@@ -30,9 +31,15 @@ const data = {
             links: [
                 {
                     name: 'Dashboard',
-                    url: '#',
+                    url: dashboard().url,
                     icon: Home,
                     isActive: true,
+                },
+                {
+                    name: 'Categories',
+                    url: categories.index().url,
+                    icon: Tag,
+                    isActive: false,
                 },
                 {
                     name: 'Posts',
@@ -92,7 +99,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 ))}
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={data.user} />
+                <NavUser />
             </SidebarFooter>
             <SidebarRail />
         </Sidebar>

@@ -21,7 +21,7 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (!Auth::attempt($request->only(['email', 'password']))) {
+        if (! Auth::attempt($request->only(['email', 'password']))) {
             return back()->withErrors([
                 'email' => 'These credentials do not match our records.',
                 'password' => 'These credentials do not match our records.',
@@ -31,5 +31,15 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard'))->with('success', 'Logged in successfully');
+    }
+
+    public function destroy(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
     }
 }
