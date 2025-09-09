@@ -76,8 +76,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild size="lg">
                             <Link href={dashboard().url}>
+                                <div className="flex aspect-square size-8 items-center justify-center rounded-md border border-secondary">LB</div>
                                 <div className="flex flex-col">
-                                    <h2 className="font-semibold">Jend Starter Kit</h2>
+                                    <h2 className="font-semibold">LaraBoost</h2>
                                     <span className="text-xs">Laravel + React</span>
                                 </div>
                             </Link>

@@ -78,7 +78,7 @@ export function NavUser({
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             <DropdownMenuItem onClick={toggleTheme} className="cursor-pointer">
-                                <ThemeIcon className="mr-2 h-4 w-4" />
+                                <ThemeIcon className="h-4 w-4" />
                                 {theme === 'light' ? 'Light Mode' : theme === 'dark' ? 'Dark Mode' : 'System Mode'}
                             </DropdownMenuItem>
                             <DropdownMenuItem>
