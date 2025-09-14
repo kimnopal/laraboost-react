@@ -39,3 +39,10 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface Link {
+    active: boolean;
+    label: string;
+    page: number;
+    url: string;
+}

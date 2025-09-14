@@ -8,5 +8,13 @@ class Category extends Model
 {
     protected $table = 'categories';
 
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'is_active',
+        'description',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 }

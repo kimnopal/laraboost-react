@@ -1,22 +1,15 @@
 import AppLayout from '@/layouts/app-layout';
-import { usePage } from '@inertiajs/react';
-import { useEffect } from 'react';
+import { dashboard } from '@/routes';
+import { BreadcrumbItem } from '@/types';
 import { toast } from 'sonner';
 
 export default function Page() {
-    const { props } = usePage();
+    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Dashboard', href: dashboard().url }];
 
-    console.log(props);
     toast('ok');
 
-    useEffect(() => {
-        if (props.success) {
-            toast('ok');
-        }
-    });
-
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <div>Dashboard</div>
         </AppLayout>
     );
