@@ -33,7 +33,7 @@ export default function EmptyState({
             <p className="mb-6 max-w-sm text-sm leading-relaxed text-muted-foreground">{description}</p>
 
             {action && (
-                <Button asChild size="sm" className="min-w-[140px]">
+                <Button asChild size="sm" className="">
                     <Link href={action.href} className="text-sm">
                         {action.icon ? <action.icon className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />}
                         {action.label}
