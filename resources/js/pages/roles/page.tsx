@@ -20,12 +20,17 @@ import { create, destroy, edit, index } from '@/routes/roles';
 import { BreadcrumbItem, Link as LinkType } from '@/types';
 import { Role } from '@/types/role';
 import { Head, Link, router } from '@inertiajs/react';
-import { Edit, Loader2, Plus, Shield, Trash2 } from 'lucide-react';
+import { Edit, Loader2, Plus, Shield, Trash2, Users } from 'lucide-react';
 import { useState } from 'react';
+
+// Extended role type for this page only
+type RoleWithUsersCount = Role & {
+    users_count: number;
+};
 
 type RolesPageProps = {
     roles: {
-        data: Role[];
+        data: RoleWithUsersCount[];
         links: LinkType[];
         current_page: number;
         last_page: number;
@@ -95,6 +100,7 @@ export default function RolesPage({ roles, filters }: RolesPageProps) {
                                         <TableHead className="w-[100px]">#</TableHead>
                                         <TableHead>Name</TableHead>
                                         <TableHead>Permissions</TableHead>
+                                        <TableHead>Users</TableHead>
                                         <TableHead className="text-right">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
@@ -106,15 +112,32 @@ export default function RolesPage({ roles, filters }: RolesPageProps) {
                                             <TableCell>
                                                 <div className="flex flex-wrap gap-1">
                                                     {role.permissions.length > 0 ? (
-                                                        role.permissions.map((permission) => (
-                                                            <Badge key={permission.id} variant="secondary">
-                                                                {permission.name}
-                                                            </Badge>
-                                                        ))
+                                                        role.permissions.map((permission, index) => {
+                                                            if (index > 3) return;
+
+                                                            if (index === 3) {
+                                                                return (
+                                                                    <Badge key={permission.id} variant="secondary">
+                                                                        + {role.permissions.length - 3}
+                                                                    </Badge>
+                                                                );
+                                                            }
+
+                                                            return (
+                                                                <Badge key={permission.id} variant="secondary">
+                                                                    {permission.name}
+                                                                </Badge>
+                                                            );
+                                                        })
                                                     ) : (
                                                         <span className="text-sm text-muted-foreground">No permissions</span>
                                                     )}
                                                 </div>
+                                            </TableCell>
+                                            <TableCell>
+                                                <span className="flex items-center gap-2">
+                                                    {role.users_count} <Users className="size-4" />
+                                                </span>
                                             </TableCell>
                                             <TableCell className="space-x-2 text-right">
                                                 <Link href={edit(role.id).url}>
