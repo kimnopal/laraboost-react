@@ -12,25 +12,19 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { create, destroy, edit, index } from '@/routes/roles';
+import { create, destroy, edit, index } from '@/routes/permissions';
 import { BreadcrumbItem, Link as LinkType } from '@/types';
-import { Role } from '@/types/role';
+import { Permission } from '@/types/permission';
 import { Head, Link, router } from '@inertiajs/react';
-import { Edit, Loader2, Plus, Shield, Trash2, Users } from 'lucide-react';
+import { Edit, Loader2, Plus, Shield, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
-// Extended role type for this page only
-type RoleWithUsersCount = Role & {
-    users_count: number;
-};
-
-type RolesPageProps = {
-    roles: {
-        data: RoleWithUsersCount[];
+type PermissionsPageProps = {
+    permissions: {
+        data: Permission[];
         links: LinkType[];
         current_page: number;
         last_page: number;
@@ -46,8 +40,8 @@ type RolesPageProps = {
     };
 };
 
-export default function RolesPage({ roles, filters }: RolesPageProps) {
-    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Roles', href: index().url }];
+export default function PermissionsPage({ permissions, filters }: PermissionsPageProps) {
+    const breadcrumbs: BreadcrumbItem[] = [{ title: 'Permissions', href: index().url }];
 
     const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
     const [deletedId, setDeletedId] = useState<number | null>(null);
@@ -75,23 +69,23 @@ export default function RolesPage({ roles, filters }: RolesPageProps) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Roles Data" />
+            <Head title="Permissions Data" />
 
             <div className="">
                 <div className="mb-6">
-                    <Heading title="Roles Data" description="Manage roles and their permissions" />
+                    <Heading title="Permissions Data" description="Manage system permissions" />
                 </div>
                 <div className="mb-5 flex items-center justify-between">
-                    <SearchInput placeholder="Search roles..." initialValue={filters.search || ''} />
+                    <SearchInput placeholder="Search permissions..." initialValue={filters.search || ''} />
                     <div>
                         <Button asChild>
                             <Link href={create().url} className="text-sm">
-                                <Plus className="size-3" /> Add Role
+                                <Plus className="size-3" /> Add Permission
                             </Link>
                         </Button>
                     </div>
                 </div>
-                {roles.data.length !== 0 ? (
+                {permissions.data.length !== 0 ? (
                     <>
                         <div className="mb-5 rounded-md border">
                             <Table>
@@ -99,54 +93,22 @@ export default function RolesPage({ roles, filters }: RolesPageProps) {
                                     <TableRow className="hover:bg-transparent">
                                         <TableHead className="w-[100px]">#</TableHead>
                                         <TableHead>Name</TableHead>
-                                        <TableHead>Permissions</TableHead>
-                                        <TableHead>Users</TableHead>
                                         <TableHead className="text-right">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {roles.data.map((role, index) => (
-                                        <TableRow key={role.id} className="">
-                                            <TableCell className="font-medium">{roles.from + index}</TableCell>
-                                            <TableCell>{role.name}</TableCell>
-                                            <TableCell>
-                                                <div className="flex flex-wrap gap-1">
-                                                    {role.permissions.length > 0 ? (
-                                                        role.permissions.map((permission, index) => {
-                                                            if (index > 3) return;
-
-                                                            if (index === 3) {
-                                                                return (
-                                                                    <Badge key={permission.id} variant="secondary">
-                                                                        + {role.permissions.length - 3}
-                                                                    </Badge>
-                                                                );
-                                                            }
-
-                                                            return (
-                                                                <Badge key={permission.id} variant="secondary">
-                                                                    {permission.name}
-                                                                </Badge>
-                                                            );
-                                                        })
-                                                    ) : (
-                                                        <span className="text-sm text-muted-foreground">No permissions</span>
-                                                    )}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>
-                                                <span className="flex items-center gap-2">
-                                                    <Users className="size-4" /> {role.users_count}
-                                                </span>
-                                            </TableCell>
+                                    {permissions.data.map((permission, index) => (
+                                        <TableRow key={permission.id} className="">
+                                            <TableCell className="font-medium">{permissions.from + index}</TableCell>
+                                            <TableCell>{permission.name}</TableCell>
                                             <TableCell className="space-x-2 text-right">
-                                                <Link href={edit(role.id).url}>
+                                                <Link href={edit(permission.id).url}>
                                                     <Button variant="outline" size="sm">
                                                         <Edit className="mr-1" />
                                                         Edit
                                                     </Button>
                                                 </Link>
-                                                <Button variant="destructive" className="" size="sm" onClick={() => handleDeleteModal(role.id)}>
+                                                <Button variant="destructive" className="" size="sm" onClick={() => handleDeleteModal(permission.id)}>
                                                     <Trash2 className="mr-1" />
                                                     Delete
                                                 </Button>
@@ -157,16 +119,16 @@ export default function RolesPage({ roles, filters }: RolesPageProps) {
                             </Table>
                         </div>
 
-                        <DataPagination data={roles} />
+                        <DataPagination data={permissions} />
                     </>
                 ) : (
                     <div className="rounded-md border">
                         <EmptyState
                             icon={Shield}
-                            title="No roles found"
-                            description="You haven't created any roles yet. Start by adding your first role to manage user permissions."
+                            title="No permissions found"
+                            description="You haven't created any permissions yet. Start by adding your first permission to manage system access."
                             action={{
-                                label: 'Add Role',
+                                label: 'Add Permission',
                                 href: create().url,
                                 icon: Plus,
                             }}
@@ -179,7 +141,7 @@ export default function RolesPage({ roles, filters }: RolesPageProps) {
                         <AlertDialogHeader>
                             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                             <AlertDialogDescription>
-                                This action cannot be undone. This will permanently delete the role and remove it from our servers.
+                                This action cannot be undone. This will permanently delete the permission and remove it from our servers.
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>

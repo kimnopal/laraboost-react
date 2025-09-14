@@ -15,7 +15,8 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import categories from '@/routes/categories';
-import { index } from '@/routes/roles';
+import permissions from '@/routes/permissions';
+import roles from '@/routes/roles';
 import { Link } from '@inertiajs/react';
 import { Group, Home, Lock, Newspaper, Tag, User } from 'lucide-react';
 import { NavMain } from './nav-main';
@@ -55,21 +56,21 @@ const data = {
             links: [
                 {
                     name: 'Roles',
-                    url: index().url,
+                    url: roles.index().url,
                     icon: Group,
                     isActive: false,
+                },
+                {
+                    name: 'Permissions',
+                    url: permissions.index().url,
+                    icon: Lock,
+                    isActive: true,
                 },
                 {
                     name: 'Users',
                     url: '#',
                     icon: User,
                     isActive: false,
-                },
-                {
-                    name: 'Permissions',
-                    url: '#',
-                    icon: Lock,
-                    isActive: true,
                 },
             ],
         },

@@ -21,16 +21,18 @@ interface FormInputProps extends FormFieldProps {
 
 export function FormField({ id, label, required = false, error, helpText, children }: FormFieldProps) {
     return (
-        <div className="space-y-2">
+        <div className="space-y-3">
             <Label htmlFor={id}>
                 {label} {required && <span className="text-destructive">*</span>}
             </Label>
-            {children}
-            {error && (
-                <div className="mt-2 flex items-center gap-2">
-                    <InputError message={error} />
-                </div>
-            )}
+            <div className="space-y-1">
+                {children}
+                {error && (
+                    <div className="flex items-center gap-2">
+                        <InputError message={error} />
+                    </div>
+                )}
+            </div>
             {helpText && !error && <p className="text-xs text-muted-foreground">{helpText}</p>}
         </div>
     );

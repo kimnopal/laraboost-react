@@ -54,7 +54,7 @@ export default function RolesForm({ role, permissions }: RolesFormProps) {
 
                                     {/* Permissions Field */}
                                     <FormField id="permissions" label="Permissions" error={errors.permissions}>
-                                        <div className="space-y-3">
+                                        <div className="mt-2 space-y-3">
                                             <p className="text-sm text-muted-foreground">Select the permissions this role should have:</p>
                                             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                                                 {permissions.map((permission) => (
