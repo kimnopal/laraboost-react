@@ -17,6 +17,7 @@ import { dashboard } from '@/routes';
 import categories from '@/routes/categories';
 import permissions from '@/routes/permissions';
 import roles from '@/routes/roles';
+import users from '@/routes/users';
 import { Link } from '@inertiajs/react';
 import { Group, Home, Lock, Newspaper, Tag, User } from 'lucide-react';
 import { NavMain } from './nav-main';
@@ -68,7 +69,7 @@ const data = {
                 },
                 {
                     name: 'Users',
-                    url: '#',
+                    url: users.index().url,
                     icon: User,
                     isActive: false,
                 },

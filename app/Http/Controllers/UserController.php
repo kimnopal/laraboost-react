@@ -2,63 +2,109 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request): Response
     {
-        //
+        $search = $request->search;
+
+        $users = User::with('roles')
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->whereRaw('LOWER(name) LIKE LOWER(?)', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(email) LIKE LOWER(?)', ["%{$search}%"]);
+                });
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return Inertia::render('users/page', [
+            'users' => $users,
+            'filters' => [
+                'search' => $search,
+            ],
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function create(): Response
     {
-        //
+        $roles = Role::all();
+
+        return Inertia::render('users/form', [
+            'roles' => $roles,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request): \Illuminate\Http\RedirectResponse
     {
-        //
+        $validated = $request->validated();
+
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        if (isset($validated['roles'])) {
+            $user->roles()->attach($validated['roles']);
+        }
+
+        return redirect()->route('users.index')
+            ->with('success', 'User created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(User $user): Response
     {
-        //
+        $roles = Role::all();
+        $user->load('roles');
+
+        return Inertia::render('users/form', [
+            'user' => $user,
+            'roles' => $roles,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(StoreUserRequest $request, User $user): \Illuminate\Http\RedirectResponse
     {
-        //
+        $validated = $request->validated();
+
+        $updateData = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ];
+
+        // Only update password if provided
+        if (! empty($validated['password'])) {
+            $updateData['password'] = Hash::make($validated['password']);
+        }
+
+        $user->update($updateData);
+
+        // Sync roles (this will remove old ones and add new ones)
+        if (isset($validated['roles'])) {
+            $user->roles()->sync($validated['roles']);
+        } else {
+            $user->roles()->detach();
+        }
+
+        return redirect()->route('users.index')
+            ->with('success', 'User updated successfully.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(User $user): \Illuminate\Http\RedirectResponse
     {
-        //
-    }
+        $user->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('users.index')
+            ->with('success', 'User deleted successfully.');
     }
 }
