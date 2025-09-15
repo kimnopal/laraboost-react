@@ -16,25 +16,14 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { create, destroy, edit, index } from '@/routes/permissions';
-import { BreadcrumbItem, Link as LinkType } from '@/types';
+import { BreadcrumbItem, Pagination } from '@/types';
 import { Permission } from '@/types/permission';
 import { Head, Link, router } from '@inertiajs/react';
 import { Edit, Loader2, Plus, Shield, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
 type PermissionsPageProps = {
-    permissions: {
-        data: Permission[];
-        links: LinkType[];
-        current_page: number;
-        last_page: number;
-        per_page: number;
-        from: number;
-        to: number;
-        total: number;
-        next_page_url: string | null;
-        prev_page_url: string | null;
-    };
+    permissions: Pagination<Permission>;
     filters: {
         search?: string;
     };

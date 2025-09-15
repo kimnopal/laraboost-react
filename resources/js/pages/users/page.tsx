@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { create, destroy, edit, index } from '@/routes/users';
-import { BreadcrumbItem, Link as LinkType } from '@/types';
+import { BreadcrumbItem, Pagination } from '@/types';
 import { User } from '@/types/user';
 import { Head, Link, router } from '@inertiajs/react';
 import { Edit, Loader2, Plus, Trash2, User as UserIcon, Users } from 'lucide-react';
@@ -32,18 +32,7 @@ type UserWithRoles = User & {
 };
 
 type UsersPageProps = {
-    users: {
-        data: UserWithRoles[];
-        links: LinkType[];
-        current_page: number;
-        last_page: number;
-        per_page: number;
-        from: number;
-        to: number;
-        total: number;
-        next_page_url: string | null;
-        prev_page_url: string | null;
-    };
+    users: Pagination<UserWithRoles>;
     filters: {
         search?: string;
     };

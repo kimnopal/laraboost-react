@@ -17,25 +17,14 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { create, destroy, edit, index } from '@/routes/categories';
-import { BreadcrumbItem, Link as LinkType } from '@/types';
+import { BreadcrumbItem, Pagination } from '@/types';
 import { Category } from '@/types/category';
 import { Head, Link, router } from '@inertiajs/react';
 import { Edit, FolderOpen, Loader2, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
 type CategoriesPageProps = {
-    categories: {
-        data: Category[];
-        links: LinkType[];
-        current_page: number;
-        last_page: number;
-        per_page: number;
-        from: number;
-        to: number;
-        total: number;
-        next_page_url: string | null;
-        prev_page_url: string | null;
-    };
+    categories: Pagination<Category>;
     filters: {
         search?: string;
     };
@@ -118,7 +107,7 @@ export default function CategoriesPage({ categories, filters }: CategoriesPagePr
                                                     </Button>
                                                 </Link>
                                                 <Button variant="destructive" className="" size="sm" onClick={() => handleDeleteModal(category.id)}>
-                                                    <Trash2 className="mr-1" />
+                                                    <Trash2 />
                                                     Delete
                                                 </Button>
                                             </TableCell>

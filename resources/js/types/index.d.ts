@@ -46,3 +46,16 @@ export interface Link {
     page: number;
     url: string;
 }
+
+export interface Pagination<T> {
+    data: T[];
+    links: LinkType[];
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    from: number;
+    to: number;
+    total: number;
+    next_page_url: string | null;
+    prev_page_url: string | null;
+}

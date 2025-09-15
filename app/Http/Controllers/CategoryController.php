@@ -11,7 +11,6 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
-        // if ($search) dd($search);
 
         $categories = Category::query()
             ->when($search, function ($query, $search) {
