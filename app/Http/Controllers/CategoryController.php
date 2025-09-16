@@ -25,12 +25,21 @@ class CategoryController extends Controller
             'filters' => [
                 'search' => $search,
             ],
+        ])->with('toast', [
+            'type'        => 'warning',
+            'title'       => 'Categories loaded successfully',
+            'description' => 'Categories loaded successfully',
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('categories/form');
+        return Inertia::render('categories/form')
+            ->with('toast', [
+                'type'        => 'info',
+                'title'       => 'Categories loaded successfully',
+                'description' => 'Categories loaded successfully',
+            ]);
     }
 
     public function store(Request $request)
@@ -47,7 +56,11 @@ class CategoryController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('categories.index')->with('success', 'Category created successfully');
+        return redirect()->route('categories.index')->with('toast', [
+            'type'        => 'success',
+            'title'       => 'Category created successfully',
+            'description' => 'Category created successfully',
+        ]);
     }
 
     public function edit(Category $category)
