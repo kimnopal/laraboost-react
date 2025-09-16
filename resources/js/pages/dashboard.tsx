@@ -1,15 +1,9 @@
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import { BreadcrumbItem } from '@/types';
-import { useEffect } from 'react';
-import { toast } from 'sonner';
 
 export default function Page() {
     const breadcrumbs: BreadcrumbItem[] = [{ title: 'Dashboard', href: dashboard().url }];
-
-    useEffect(() => {
-        toast('ok');
-    }, []);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
