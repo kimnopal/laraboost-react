@@ -26,8 +26,15 @@ export interface SharedData {
     name: string;
     quote: { message: string; author: string };
     auth: Auth;
+    toast: Toast;
     sidebarOpen: boolean;
     [key: string]: unknown;
+}
+
+export interface Toast {
+    type: 'success' | 'error' | 'info' | 'warning' | null;
+    title: string;
+    description: string;
 }
 
 export interface User {
