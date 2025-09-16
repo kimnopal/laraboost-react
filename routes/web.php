@@ -15,9 +15,12 @@ Route::get('/', function () {
 
 Route::middleware(['guest'])->group(function () {
     Route::get('/register', [RegisterController::class, 'create'])->name('register');
-    Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+    Route::post('/register', [RegisterController::class, 'store'])->name('register.store')->middleware('throttle:5,1');
     Route::get('/login', [AuthController::class, 'create'])->name('login');
-    Route::post('/login', [AuthController::class, 'store'])->name('login.store');
+    Route::post('/login', [AuthController::class, 'store'])->name('login.store')->middleware('throttle:5,1');
+
+    Route::get('/google/redirect', [AuthController::class, 'redirectToGoogle'])->name('google.redirect');
+    Route::get('/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('google.callback');
 });
 
 Route::middleware(['auth'])->group(function () {

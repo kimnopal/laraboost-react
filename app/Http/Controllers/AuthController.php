@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -41,5 +43,29 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login');
+    }
+
+    public function redirectToGoogle()
+    {
+        // dd('Fungsi redirectToGoogle berjalan!');
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {
+        $user = Socialite::driver('google')->user();
+
+        $user = User::updateOrCreate([
+            'email' => $user->email,
+        ], [
+            'name' => $user->name,
+            'google_id' => $user->id,
+            'google_token' => $user->token,
+            'google_refresh_token' => $user->refreshToken,
+        ]);
+
+        Auth::login($user);
+
+        return redirect()->intended(route('dashboard'))->with('success', 'Logged in successfully');
     }
 }
